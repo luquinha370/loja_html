@@ -4,6 +4,220 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Loja Virtual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Login */
+        .login-form {
+            max-width: 400px;
+            margin: 50px auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-success {
+            background: #28a745;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        /* Navegação */
+        .nav {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .nav button {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .nav button.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        .nav button:hover {
+            background: #e9ecef;
+        }
+
+        .nav button.active:hover {
+            background: #0056b3;
+        }
+
+        /* Seções */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tr:hover {
+            background: #e9ecef;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logout {
+            background: #6c757d;
+            font-size: 12px;
+            padding: 8px 15px;
+        }
+
+        .logout:hover {
+            background: #5a6268;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+        }
+
+        .form-actions button {
+            margin-right: 10px;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #6c757d;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .login-header {
+            text-align: center;
+            color: #007bff;
+        }
+    </style>
 </head>
 <body>
     <!-- Tela de Login -->
@@ -100,20 +314,19 @@
                     </div>
                 </form>
             </div>
-        </div>
-        </div>  
-         <!-- Editar Produto -->
+
+            <!-- Editar Produto -->
             <div id="editar" class="section">
                 <h2>Editar Produto</h2>
                 <p style="color: #666; margin-bottom: 20px;">Selecione um produto para editar suas informações</p>
-               
+                
                 <div class="form-group">
                     <label for="selectProduto">Selecionar Produto:</label>
                     <select id="selectProduto" onchange="carregarProduto()">
                         <option value="">Escolha um produto para editar</option>
                     </select>
                 </div>
-               
+                
                 <form id="editarForm" class="hidden">
                     <input type="hidden" id="editId">
                     <div class="form-group">
@@ -138,9 +351,11 @@
                     </div>
                 </form>
             </div>
- 
+
             <div id="message" class="alert alert-success hidden"></div>
- 
+        </div>
+    </div>
+
     <script>
         // Banco de dados simulado
         let produtos = [
@@ -149,20 +364,20 @@
             {id: 4, nome: 'Blusa dry fit"', preco: 60.00, estoque: 8, descricao: 'Tamanho do PP ao GG'}
         ];
         let proximoId = 5;
- 
+
         // Sistema de Login
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-           
+            
             const usuario = document.getElementById('usuario').value.trim();
             const senha = document.getElementById('senha').value;
-           
+            
             if (usuario === 'admin' && senha === '1234') {
                 // Login bem-sucedido
                 document.getElementById('loginScreen').classList.add('hidden');
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('loginError').classList.add('hidden');
-               
+                
                 // Inicializar o painel
                 mostrarProdutos();
                 atualizarSelectProdutos();
@@ -174,7 +389,7 @@
                 document.getElementById('senha').focus();
             }
         });
- 
+
         // Logout
         function logout() {
             if (confirm('Deseja realmente sair do sistema?')) {
@@ -184,30 +399,30 @@
                 document.getElementById('loginError').classList.add('hidden');
             }
         }
- 
+
         // Navegação entre seções
         function showSection(sectionName) {
             // Remove active de todas as seções e botões
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-           
+            
             // Ativa a seção e botão selecionados
             document.getElementById(sectionName).classList.add('active');
             event.target.classList.add('active');
-           
+            
             // Esconde mensagens
             document.getElementById('message').classList.add('hidden');
         }
- 
+
         // Exibir produtos na tabela
         function mostrarProdutos() {
             const tbody = document.getElementById('produtosBody');
-           
+            
             if (produtos.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" class="empty-message">Nenhum produto cadastrado</td></tr>';
                 return;
             }
-           
+            
             tbody.innerHTML = produtos.map(produto => `
                 <tr>
                     <td><strong>#${produto.id}</strong></td>
@@ -221,11 +436,11 @@
                 </tr>
             `).join('');
         }
-        div
-          // Criar novo produto
+
+        // Criar novo produto
         document.getElementById('criarForm').addEventListener('submit', function(e) {
             e.preventDefault();
-           
+            
             const novoProduto = {
                 id: proximoId++,
                 nome: document.getElementById('nome').value.trim(),
@@ -233,7 +448,7 @@
                 estoque: parseInt(document.getElementById('estoque').value),
                 descricao: document.getElementById('descricao').value.trim()
             };
-           
+            
             produtos.push(novoProduto);
             mostrarProdutos();
             atualizarSelectProdutos();
@@ -241,27 +456,27 @@
             this.reset();
             document.getElementById('nome').focus();
         });
- 
+
         // Atualizar select de produtos para edição
         function atualizarSelectProdutos() {
             const select = document.getElementById('selectProduto');
             select.innerHTML = '<option value="">Escolha um produto para editar</option>';
-           
+            
             produtos.forEach(produto => {
                 select.innerHTML += `<option value="${produto.id}">${produto.nome} (ID: ${produto.id})</option>`;
             });
         }
- 
+
         // Carregar produto no formulário de edição
         function carregarProduto() {
             const id = parseInt(document.getElementById('selectProduto').value);
             const form = document.getElementById('editarForm');
-           
+            
             if (!id) {
                 form.classList.add('hidden');
                 return;
             }
-           
+            
             const produto = produtos.find(p => p.id === id);
             if (produto) {
                 document.getElementById('editId').value = produto.id;
@@ -272,20 +487,20 @@
                 form.classList.remove('hidden');
             }
         }
- 
+
         // Cancelar edição
         function cancelarEdicao() {
             document.getElementById('editarForm').classList.add('hidden');
             document.getElementById('selectProduto').value = '';
         }
- 
+
         // Salvar edição do produto
         document.getElementById('editarForm').addEventListener('submit', function(e) {
             e.preventDefault();
-           
+            
             const id = parseInt(document.getElementById('editId').value);
             const index = produtos.findIndex(p => p.id === id);
-           
+            
             if (index !== -1) {
                 const nomeAntigo = produtos[index].nome;
                 produtos[index] = {
@@ -295,7 +510,7 @@
                     estoque: parseInt(document.getElementById('editEstoque').value),
                     descricao: document.getElementById('editDescricao').value.trim()
                 };
-               
+                
                 mostrarProdutos();
                 atualizarSelectProdutos();
                 mostrarMensagem(` Produto "${nomeAntigo}" atualizado com sucesso!`);
@@ -318,16 +533,16 @@
             const msg = document.getElementById('message');
             msg.textContent = texto;
             msg.classList.remove('hidden');
-           
+            
             setTimeout(() => {
                 msg.classList.add('hidden');
             }, 5000);
         }
- 
+
         // Inicialização ao carregar a página
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('usuario').focus();
         });
-    </script>  
+    </script>
 </body>
-</html>
+</html>     
