@@ -222,6 +222,112 @@
             `).join('');
         }
         div
+          // Criar novo produto
+        document.getElementById('criarForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+           
+            const novoProduto = {
+                id: proximoId++,
+                nome: document.getElementById('nome').value.trim(),
+                preco: parseFloat(document.getElementById('preco').value),
+                estoque: parseInt(document.getElementById('estoque').value),
+                descricao: document.getElementById('descricao').value.trim()
+            };
+           
+            produtos.push(novoProduto);
+            mostrarProdutos();
+            atualizarSelectProdutos();
+            mostrarMensagem(` Produto "${novoProduto.nome}" criado com sucesso!`);
+            this.reset();
+            document.getElementById('nome').focus();
+        });
+ 
+        // Atualizar select de produtos para edição
+        function atualizarSelectProdutos() {
+            const select = document.getElementById('selectProduto');
+            select.innerHTML = '<option value="">Escolha um produto para editar</option>';
+           
+            produtos.forEach(produto => {
+                select.innerHTML += `<option value="${produto.id}">${produto.nome} (ID: ${produto.id})</option>`;
+            });
+        }
+ 
+        // Carregar produto no formulário de edição
+        function carregarProduto() {
+            const id = parseInt(document.getElementById('selectProduto').value);
+            const form = document.getElementById('editarForm');
+           
+            if (!id) {
+                form.classList.add('hidden');
+                return;
+            }
+           
+            const produto = produtos.find(p => p.id === id);
+            if (produto) {
+                document.getElementById('editId').value = produto.id;
+                document.getElementById('editNome').value = produto.nome;
+                document.getElementById('editPreco').value = produto.preco;
+                document.getElementById('editEstoque').value = produto.estoque;
+                document.getElementById('editDescricao').value = produto.descricao;
+                form.classList.remove('hidden');
+            }
+        }
+ 
+        // Cancelar edição
+        function cancelarEdicao() {
+            document.getElementById('editarForm').classList.add('hidden');
+            document.getElementById('selectProduto').value = '';
+        }
+ 
+        // Salvar edição do produto
+        document.getElementById('editarForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+           
+            const id = parseInt(document.getElementById('editId').value);
+            const index = produtos.findIndex(p => p.id === id);
+           
+            if (index !== -1) {
+                const nomeAntigo = produtos[index].nome;
+                produtos[index] = {
+                    id: id,
+                    nome: document.getElementById('editNome').value.trim(),
+                    preco: parseFloat(document.getElementById('editPreco').value),
+                    estoque: parseInt(document.getElementById('editEstoque').value),
+                    descricao: document.getElementById('editDescricao').value.trim()
+                };
+               
+                mostrarProdutos();
+                atualizarSelectProdutos();
+                mostrarMensagem(` Produto "${nomeAntigo}" atualizado com sucesso!`);
+                this.classList.add('hidden');
+                document.getElementById('selectProduto').value = '';
+            }
+        });
+        // Excluir produto
+        function excluirProduto(id) {
+            const produto = produtos.find(p => p.id === id);
+            if (produto && confirm(`Tem certeza que deseja excluir o produto "${produto.nome}"?`)) {
+                produtos = produtos.filter(p => p.id !== id);
+                mostrarProdutos();
+                atualizarSelectProdutos();
+                mostrarMensagem(`Produto "${produto.nome}" excluído com sucesso!`);
+            }
+    }
+        // Exibir mensagens de feedback
+        function mostrarMensagem(texto) {
+            const msg = document.getElementById('message');
+            msg.textContent = texto;
+            msg.classList.remove('hidden');
+           
+            setTimeout(() => {
+                msg.classList.add('hidden');
+            }, 5000);
+        }
+ 
+        // Inicialização ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('usuario').focus();
+        });
     </script>  
 </body>
 </html>
